@@ -46,6 +46,9 @@ async function getWeather() {
     const destUrl = `${API_BASE_URL}/api/weather?city=${encodeURIComponent(
       destcity
     )}&state=${encodeURIComponent(deststate)}`;
+    const routeUrl = `${API_BASE_URL}/api/route?origin=${encodeURIComponent(
+    `${origcity},${origstate}`
+    )}&destination=${encodeURIComponent(`${destcity},${deststate}`)}`;
 
     const origResponse = await fetch(origUrl);
     const origData = await origResponse.json();
@@ -62,8 +65,15 @@ async function getWeather() {
       showMessage(destData.error || "Could not fetch weather.", true);
       return;
     }
+    const routeResponse = await fetch(routeUrl);
+    const routeData = await routeResponse.json();
 
-    displayTripWeather(origData, destData);
+    if (!routeResponse.ok) {
+    showMessage(routeData.error || "Could not fetch route.", true);
+    return;
+    }
+
+    displayTripWeather(origData, destData, routeData);
     
   } catch (error) {
     console.error(error);
@@ -74,7 +84,7 @@ async function getWeather() {
   }
 }
 
-function displayTripWeather(origin, destination){
+function displayTripWeather(origin, destination, route){
     weatherInfo.classList.remove("hidden");
     const tempDifference = Math.round(destination.temperature - origin.temperature);
 
@@ -94,6 +104,8 @@ function displayTripWeather(origin, destination){
     <div class="trip-summary">
       <h2>Trip Weather Summary</h2>
       <p>${comparisonMessage}</p>
+      <p><strong>Distance:</strong> ${route.distanceMiles} miles</p>
+<p><strong>Estimated drive time:</strong> ${formatDuration(route.durationMinutes)}</p>
     </div>
 
     <div class="weather-card-grid">
@@ -143,4 +155,15 @@ function showMessage(message, isError = false) {
   weatherInfo.innerHTML = `
     <p class="${isError ? "error" : ""}">${message}</p>
   `;
+}
+//Duration helper function
+function formatDuration(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  if (hours === 0) {
+    return `${minutes} min`;
+  }
+
+  return `${hours} hr ${minutes} min`;
 }
