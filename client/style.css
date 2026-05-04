@@ -149,7 +149,7 @@ button:disabled {
 
 .weather-card-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -209,7 +209,7 @@ button:disabled {
   display: none;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 850px) {
   .search-card {
     grid-template-columns: 1fr;
   }

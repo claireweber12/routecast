@@ -73,7 +73,24 @@ async function getWeather() {
     return;
     }
 
-    displayTripWeather(origData, destData, routeData);
+    const middleIndex = Math.floor(routeData.coordinates.length / 2);
+    const midpoint = routeData.coordinates[middleIndex];
+
+    // Mapbox coordinates are [longitude, latitude]
+    const midpointLon = midpoint[0];
+    const midpointLat = midpoint[1];
+
+    const midpointUrl = `${API_BASE_URL}/api/weather/coordinates?lat=${midpointLat}&lon=${midpointLon}`;
+
+    const midpointResponse = await fetch(midpointUrl);
+    const midpointData = await midpointResponse.json();
+
+    if (!midpointResponse.ok) {
+      showMessage(midpointData.error || "Could not fetch midpoint weather.", true);
+      return;
+    }
+
+    displayTripWeather(origData, midpointData, destData, routeData);
     
   } catch (error) {
     console.error(error);
@@ -84,7 +101,7 @@ async function getWeather() {
   }
 }
 
-function displayTripWeather(origin, destination, route){
+function displayTripWeather(origin, midpoint, destination, route){
     weatherInfo.classList.remove("hidden");
     const tempDifference = Math.round(destination.temperature - origin.temperature);
 
@@ -110,6 +127,7 @@ function displayTripWeather(origin, destination, route){
 
     <div class="weather-card-grid">
       ${createWeatherCard(origin, "Origin")}
+      ${createWeatherCard(midpoint, "Midpoint")}
       ${createWeatherCard(destination, "Destination")}
     </div>
   `;
