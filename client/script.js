@@ -1,5 +1,7 @@
-const cityInput = document.getElementById("cityInput");
-const stateInput = document.getElementById("stateInput");
+const origCity = document.getElementById("origCity");
+const origState = document.getElementById("origState");
+const destCity = document.getElementById("destCity");
+const destState = document.getElementById("destState");
 const searchBtn = document.getElementById("searchBtn");
 const weatherInfo = document.getElementById("weatherInfo");
 
@@ -7,8 +9,10 @@ const API_BASE_URL = "http://localhost:5050";
 
 searchBtn.addEventListener("click", getWeather);
 
-cityInput.addEventListener("keydown", handleEnter);
-stateInput.addEventListener("keydown", handleEnter);
+origCity.addEventListener("keydown", handleEnter);
+origState.addEventListener("keydown", handleEnter);
+destCity.addEventListener("keydown", handleEnter);
+destState.addEventListener("keydown", handleEnter);
 
 function handleEnter(event) {
   if (event.key === "Enter") {
@@ -17,11 +21,17 @@ function handleEnter(event) {
 }
 
 async function getWeather() {
-  const city = cityInput.value.trim();
-  const state = stateInput.value.trim();
+  const origcity = origCity.value.trim();
+  const origstate = origState.value.trim();
+  const destcity = destCity.value.trim();
+  const deststate = destState.value.trim();
 
-  if (!city) {
-    showMessage("Please enter a city.", true);
+  if (!origcity) {
+    showMessage("Please enter a origin city.", true);
+    return;
+  }
+  if (!destcity) {
+    showMessage("Please enter a destination city.", true);
     return;
   }
 
@@ -30,19 +40,31 @@ async function getWeather() {
     searchBtn.textContent = "Loading...";
     showMessage("Fetching weather...");
 
-    const url = `${API_BASE_URL}/api/weather?city=${encodeURIComponent(
-      city
-    )}&state=${encodeURIComponent(state)}`;
+    const origUrl = `${API_BASE_URL}/api/weather?city=${encodeURIComponent(
+      origcity
+    )}&state=${encodeURIComponent(origstate)}`;
+    const destUrl = `${API_BASE_URL}/api/weather?city=${encodeURIComponent(
+      destcity
+    )}&state=${encodeURIComponent(deststate)}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
+    const origResponse = await fetch(origUrl);
+    const origData = await origResponse.json();
 
-    if (!response.ok) {
-      showMessage(data.error || "Could not fetch weather.", true);
+    if (!origResponse.ok) {
+      showMessage(origData.error || "Could not fetch weather.", true);
       return;
     }
 
-    displayWeather(data);
+    const destResponse = await fetch(destUrl);
+    const destData = await destResponse.json();
+
+    if (!destResponse.ok) {
+      showMessage(destData.error || "Could not fetch weather.", true);
+      return;
+    }
+
+    displayTripWeather(origData, destData);
+    
   } catch (error) {
     console.error(error);
     showMessage("Could not connect to the backend server.", true);
@@ -52,33 +74,64 @@ async function getWeather() {
   }
 }
 
-function displayWeather(data) {
-  weatherInfo.classList.remove("hidden");
+function displayTripWeather(origin, destination){
+    weatherInfo.classList.remove("hidden");
+    const tempDifference = Math.round(destination.temperature - origin.temperature);
+
+  let comparisonMessage = "";
+
+  if (tempDifference > 0) {
+    comparisonMessage = `Your destination is ${tempDifference}°F warmer than your starting point.`;
+  } else if (tempDifference < 0) {
+    comparisonMessage = `Your destination is ${Math.abs(
+      tempDifference
+    )}°F cooler than your starting point.`;
+  } else {
+    comparisonMessage = "Your destination is about the same temperature as your starting point.";
+  }
 
   weatherInfo.innerHTML = `
-    <div class="weather-header">
-      <div>
-        <h2>${data.name || data.city}, ${data.state || data.country || ""}</h2>
-        <p class="description">${data.description}</p>
-      </div>
-
-      <div class="temp">${Math.round(data.temperature)}°F</div>
+    <div class="trip-summary">
+      <h2>Trip Weather Summary</h2>
+      <p>${comparisonMessage}</p>
     </div>
 
-    <div class="weather-grid">
-      <div class="weather-stat">
-        <span>Feels Like</span>
-        <strong>${Math.round(data.feelsLike)}°F</strong>
+    <div class="weather-card-grid">
+      ${createWeatherCard(origin, "Origin")}
+      ${createWeatherCard(destination, "Destination")}
+    </div>
+  `;
+}
+
+function createWeatherCard(data, label) {
+  return `
+    <div class="weather-location-card">
+      <p class="eyebrow">${label}</p>
+
+      <div class="weather-header">
+        <div>
+          <h2>${data.name || data.city}, ${data.state || data.country || ""}</h2>
+          <p class="description">${data.description}</p>
+        </div>
+
+        <div class="temp">${Math.round(data.temperature)}°F</div>
       </div>
 
-      <div class="weather-stat">
-        <span>Humidity</span>
-        <strong>${data.humidity}%</strong>
-      </div>
+      <div class="weather-grid">
+        <div class="weather-stat">
+          <span>Feels Like</span>
+          <strong>${Math.round(data.feelsLike)}°F</strong>
+        </div>
 
-      <div class="weather-stat">
-        <span>Wind</span>
-        <strong>${data.windSpeed} mph</strong>
+        <div class="weather-stat">
+          <span>Humidity</span>
+          <strong>${data.humidity}%</strong>
+        </div>
+
+        <div class="weather-stat">
+          <span>Wind</span>
+          <strong>${data.windSpeed} mph</strong>
+        </div>
       </div>
     </div>
   `;

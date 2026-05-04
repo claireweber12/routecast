@@ -14,13 +14,25 @@
             <p class="subtitle">Check the weather before your trip</p>
         </section>
         <section class="search-card">
-            <div class="input-group">
-                <label for="cityInput">City</label>
-                <input id="cityInput" type="text" placeholder="Auburn" />
+            <div class="origin">
+                <div class="input-group">
+                    <label for="origCity">Origin City</label>
+                    <input id="origCity" type="text" placeholder="Enter Origin City." />
+                </div>
+                <div class="input-group">
+                    <label for="origState">Origin State</label>
+                    <input id="origState" type="text" oninput="this.value.toUpperCase()" placeholder="Enter origin state">
+                </div>
             </div>
-            <div class="input-group">
-                <label for="stateInput">State</label>
-                <input id="stateInput" type="text" oninput="this.value.toUpperCase()" placeholder="Enter a state">
+            <div class="destination">
+                <div class="input-group">
+                    <label for="destCity">Destination City</label>
+                    <input id="destCity" type="text" placeholder="Enter Destination City.">
+                </div>
+                <div class="input-group">
+                    <label for="destState">Destination State</label>
+                    <input id="destState" type="text" oninput="this.value.toUpperCase()" placeholder="Enter destination state">
+                </div>
             </div>
             <button id="searchBtn">Get Weather</button>
         </section>

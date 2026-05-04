@@ -11,7 +11,7 @@ body {
 }
 
 .app {
-  width: min(700px, 92%);
+  width: min(950px, 92%);
   margin: 0 auto;
   padding: 72px 0;
 }
@@ -53,22 +53,35 @@ h1 {
 
 .search-card {
   display: grid;
-  grid-template-columns: 1fr 120px auto;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   align-items: end;
   padding: 24px;
 }
 
-.input-group {
+#searchBtn {
+  grid-column: 1 / -1;
+}
+
+.input-group{
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
+.origin,
+.destination{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
 label {
   font-weight: 700;
   font-size: 0.9rem;
   color: #334155;
+  margin-top:6px;
 }
 
 input {
@@ -77,6 +90,7 @@ input {
   border: 1px solid #cbd5e1;
   border-radius: 12px;
   font-size: 1rem;
+  
 }
 
 input:focus {
@@ -116,6 +130,35 @@ button:disabled {
   align-items: flex-start;
   margin-bottom: 18px;
 }
+.trip-summary {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.trip-summary h2 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+}
+
+.trip-summary p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.weather-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.weather-location-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+}
 
 .weather-header h2 {
   margin: 0;
@@ -136,7 +179,7 @@ button:disabled {
 
 .weather-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 14px;
 }
 
@@ -177,5 +220,8 @@ button:disabled {
 
   .weather-grid {
     grid-template-columns: 1fr;
+  }
+  .weather-card-grid{
+    grid-template-columns:1fr;
   }
 }
