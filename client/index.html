@@ -8,6 +8,26 @@
     <title>Document</title>
 </head>
 <body>
+    <main class="app">
+        <section class="hero">
+            <p class="eyebrow">RouteCast</p>
+            <p class="subtitle">Check the weather before your trip</p>
+        </section>
+        <section class="search-card">
+            <div class="input-group">
+                <label for="cityInput">City</label>
+                <input id="cityInput" type="text" placeholder="Auburn" />
+            </div>
+            <div class="input-group">
+                <label for="stateInput">State</label>
+                <input id="stateInput" type="text" oninput="this.value.toUpperCase()" placeholder="Enter a state">
+            </div>
+            <button id="searchBtn">Get Weather</button>
+        </section>
+
+        <section id="weatherInfo" class="weather-card hidden"></section>
+
+    </main>
     
 </body>
 </html>
