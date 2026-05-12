@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+    <main class="app">
+        <section class="hero">
+            <p class="eyebrow">RouteCast</p>
+            <p class="subtitle">Check the weather before your trip</p>
+        </section>
+        <section class="search-card">
+            <div class="origin">
+                <div class="input-group">
+                    <label for="origCity">Origin City</label>
+                    <input id="origCity" type="text" placeholder="Enter Origin City." />
+                </div>
+                <div class="input-group">
+                    <label for="origState">Origin State</label>
+                    <input id="origState" type="text" oninput="this.value.toUpperCase()" placeholder="Enter origin state">
+                </div>
+            </div>
+            <div class="destination">
+                <div class="input-group">
+                    <label for="destCity">Destination City</label>
+                    <input id="destCity" type="text" placeholder="Enter Destination City.">
+                </div>
+                <div class="input-group">
+                    <label for="destState">Destination State</label>
+                    <input id="destState" type="text" oninput="this.value.toUpperCase()" placeholder="Enter destination state">
+                </div>
+            </div>
+            <button id="searchBtn">Get Weather</button>
+        </section>
+
+        <section id="weatherInfo" class="weather-card hidden"></section>
+
+    </main>
+    
+</body>
+</html>
