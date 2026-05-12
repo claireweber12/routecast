@@ -5,7 +5,7 @@ const destState = document.getElementById("destState");
 const searchBtn = document.getElementById("searchBtn");
 const weatherInfo = document.getElementById("weatherInfo");
 
-const API_BASE_URL = https://routecast-chyc.onrender.com
+const API_BASE_URL ='https://routecast-chyc.onrender.com'
   window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://localhost:5050"
     : "https://routecast-api.onrender.com";
